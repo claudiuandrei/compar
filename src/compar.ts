@@ -72,7 +72,7 @@ export const defaultMatchers: { [type: string]: Matcher } = {
 }
 
 // Create a custom match
-export const createMatch = (
+export const create = (
   matchers: { [type: string]: Matcher } = defaultMatchers,
   convert: (input: any) => [string, ...Array<any>] = v => v
 ) => {
@@ -88,6 +88,3 @@ export const createMatch = (
   // Return match
   return match
 }
-
-// Create the default matchers
-export const match = createMatch()

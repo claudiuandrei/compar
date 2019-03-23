@@ -1,5 +1,8 @@
-import { match, createMatch, defaultMatchers } from '../src/compar'
+import { create, defaultMatchers } from '../src/compar'
 import { range } from '../src/utils'
+
+// Load the default match
+const match = create()
 
 describe('EQUAL', () => {
   // Test equality
@@ -337,7 +340,7 @@ describe('CUSTOM_MATCH', () => {
   // Test equality
   test('Custom matcher should match the conditions', () => {
     // Setup the match
-    const customMatch = createMatch({ EQUAL: (match, context, [value]) => [context === value] })
+    const customMatch = create({ EQUAL: (match, context, [value]) => [context === value] })
 
     // Create custom matcher
     const [ct] = customMatch('John Doe', ['EQUAL', 'John Doe'])
@@ -349,7 +352,7 @@ describe('CUSTOM_MATCH', () => {
   // Test equality
   test('Custom matcher should not match default conditions', () => {
     // Setup the match
-    const customMatch = createMatch({ EQUAL: (context, [value]) => [context === value] })
+    const customMatch = create({ EQUAL: (context, [value]) => [context === value] })
 
     // Create custom matcher
     const [ct] = customMatch('John Doe', ['=', 'John Doe'])
@@ -363,7 +366,7 @@ describe('CUSTOM_CONVERT', () => {
   // Test equality
   test('Custom convertor should change the output correctly', () => {
     // Setup the match
-    const customMatch = createMatch(defaultMatchers, v => {
+    const customMatch = create(defaultMatchers, v => {
       // The value can be an object
       const { type, payload } = v
 

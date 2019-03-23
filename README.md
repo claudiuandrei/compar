@@ -21,12 +21,14 @@ npm install --save compar
 Before you start import the library
 
 ```javascript
-import { match } from 'compar'
+import { create } from 'compar'
 ```
 
 #### Basic usage
 
 ```javascript
+const match = create()
+
 match(
   {
     environment: 'stage',

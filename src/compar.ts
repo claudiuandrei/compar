@@ -72,18 +72,10 @@ export const defaultMatchers: { [type: string]: Matcher } = {
 }
 
 // Create a custom match
-export const create = (
-  matchers: { [type: string]: Matcher } = defaultMatchers,
-  convert: (input: any) => [string, ...Array<any>] = v => v
-) => {
+export const create = (matchers: { [type: string]: Matcher } = defaultMatchers) => {
   // Match
-  const match = (context: any, input: any): Unit => {
-    // Hook on match
-    const [type, ...payload] = convert(input)
-
-    // Match
-    return matchers[type] ? matchers[type](match, context, payload) : [false]
-  }
+  const match = (context: any, [type, ...payload]: [string, ...Array<any>]): Unit =>
+    matchers[type] ? matchers[type](match, context, payload) : [false]
 
   // Return match
   return match

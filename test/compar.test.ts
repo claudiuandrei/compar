@@ -361,35 +361,3 @@ describe('CUSTOM_MATCH', () => {
     expect(ct).toEqual(false)
   })
 })
-
-describe('CUSTOM_CONVERT', () => {
-  // Test equality
-  test('Custom convertor should change the output correctly', () => {
-    // Setup the match
-    const customMatch = create(defaultMatchers, v => {
-      // The value can be an object
-      const { type, payload } = v
-
-      // We can change the name too
-      switch (type) {
-        case 'EQUAL':
-          return ['=', payload]
-        case 'GREATER_THAN':
-          return ['>', payload]
-        case 'SOME':
-          return ['|', ...payload]
-        default:
-          return [type, payload]
-      }
-    })
-
-    // Create custom matcher
-    const [ct] = customMatch(25, {
-      type: 'SOME',
-      payload: [{ type: 'GREATER_THAN', payload: 25 }, { type: 'EQUAL', payload: 25 }]
-    })
-
-    // Match result should be true
-    expect(ct).toEqual(true)
-  })
-})

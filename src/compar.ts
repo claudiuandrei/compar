@@ -25,12 +25,6 @@ export const defaultMatchers: { [type: string]: Matcher } = {
   // Regex match
   '~': (match, context, [value]) => [new RegExp(value, 'i').test(context)],
 
-  // Match every condition
-  '&': (match, context, payload) => [payload.every(value => match(context, value)[0])],
-
-  // Match any condition
-  '|': (match, context, payload) => [payload.some(value => match(context, value)[0])],
-
   // Match opposite condition
   '!': (match, context, [value]) => [!match(context, value)[0]],
 
@@ -53,12 +47,32 @@ export const defaultMatchers: { [type: string]: Matcher } = {
   '?': (match, context, [condition, value]) =>
     match(context, condition)[0] ? match(context, value) : [false],
 
-  // Find
-  '*': (match, context, payload) => {
+  // Match every condition
+  '&': (match, context, payload) => {
+    // Keep the value so we can return it
+    let success, value
+
     // Find the value
-    for (let index = 0; index < payload.length; index += 1) {
+    for (let current of payload) {
       // Look for a value
-      const [success, value] = match(context, payload[index])
+      ;[success, value] = match(context, current)
+
+      // Return only
+      if (!success) {
+        return [false]
+      }
+    }
+
+    // Everything was succesful
+    return [true, value]
+  },
+
+  // Match any condition
+  '|': (match, context, payload) => {
+    // Find the value
+    for (let current of payload) {
+      // Look for a value
+      const [success, value] = match(context, current)
 
       // Return only
       if (success) {

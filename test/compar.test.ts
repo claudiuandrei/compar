@@ -102,64 +102,6 @@ describe('REGEXP', () => {
   })
 })
 
-describe('EVERY', () => {
-  // Test equality
-  test('EVERY should match if all values match', () => {
-    // Setup the match
-    const [ct] = match(25, ['&', ['>', 20], ['<', 40]])
-
-    // Match result should be true
-    expect(ct).toEqual(true)
-  })
-
-  // Test equality
-  test('EVERY should not match if any values match', () => {
-    // Setup the match
-    const [ct] = match(25, ['&', ['>', 20], ['<', 20]])
-
-    // Match result should be true
-    expect(ct).toEqual(false)
-  })
-
-  // Test equality
-  test('EVERY should not match if none of the values match', () => {
-    // Setup the match
-    const [ct] = match(25, ['&', ['>', 40], ['<', 20]])
-
-    // Match result should be true
-    expect(ct).toEqual(false)
-  })
-})
-
-describe('SOME', () => {
-  // Test equality
-  test('SOME should match if all values match', () => {
-    // Setup the match
-    const [ct] = match(25, ['|', ['>', 20], ['<', 40]])
-
-    // Match result should be true
-    expect(ct).toEqual(true)
-  })
-
-  // Test equality
-  test('SOME should match if any values match', () => {
-    // Setup the match
-    const [ct] = match(25, ['|', ['>', 40], ['<', 30]])
-
-    // Match result should be true
-    expect(ct).toEqual(true)
-  })
-
-  // Test equality
-  test('SOME should not match if none of the values match', () => {
-    // Setup the match
-    const [ct] = match(25, ['|', ['>', 40], ['<', 20]])
-
-    // Match result should be true
-    expect(ct).toEqual(false)
-  })
-})
-
 describe('NOT', () => {
   // Test equality
   test('NOT should match an the oposite value', () => {
@@ -284,12 +226,97 @@ describe('CONDITIONAL', () => {
   })
 })
 
-describe('FIND', () => {
+describe('EVERY', () => {
   // Test equality
-  test('FIND should not retrieve value if no condition matches', () => {
+  test('EVERY should match if all values match', () => {
+    // Setup the match
+    const [ct] = match(25, ['&', ['>', 20], ['<', 40]])
+
+    // Match result should be true
+    expect(ct).toEqual(true)
+  })
+
+  // Test equality
+  test('EVERY should not match if any values match', () => {
+    // Setup the match
+    const [ct] = match(25, ['&', ['>', 20], ['<', 20]])
+
+    // Match result should be true
+    expect(ct).toEqual(false)
+  })
+
+  // Test equality
+  test('EVERY should not match if none of the values match', () => {
+    // Setup the match
+    const [ct] = match(25, ['&', ['>', 40], ['<', 20]])
+
+    // Match result should be true
+    expect(ct).toEqual(false)
+  })
+
+  // Test equality
+  test('EVERY should not retrieve value if not all conditions match', () => {
     // Setup the match
     const [ct, v] = match('John Doe', [
-      '*',
+      '&',
+      ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']],
+      ['?', ['=', 'John Doe'], ['@', 'John Doe']],
+      ['@', 'No one']
+    ])
+
+    // Match result should be true
+    expect(ct).toEqual(false)
+    expect(v).toBeUndefined()
+  })
+
+  // Test equality
+  test('EVERY should retrieve last value if all conditions match and there is a default', () => {
+    // Setup the match
+    const [ct, v] = match('Jane Doe', [
+      '&',
+      ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']],
+      ['@', 'Everyone']
+    ])
+
+    // Match result should be true
+    expect(ct).toEqual(true)
+    expect(v).toEqual('Everyone')
+  })
+})
+
+describe('SOME', () => {
+  // Test equality
+  test('SOME should match if all values match', () => {
+    // Setup the match
+    const [ct] = match(25, ['|', ['>', 20], ['<', 40]])
+
+    // Match result should be true
+    expect(ct).toEqual(true)
+  })
+
+  // Test equality
+  test('SOME should match if any values match', () => {
+    // Setup the match
+    const [ct] = match(25, ['|', ['>', 40], ['<', 30]])
+
+    // Match result should be true
+    expect(ct).toEqual(true)
+  })
+
+  // Test equality
+  test('SOME should not match if none of the values match', () => {
+    // Setup the match
+    const [ct] = match(25, ['|', ['>', 40], ['<', 20]])
+
+    // Match result should be true
+    expect(ct).toEqual(false)
+  })
+
+  // Test equality
+  test('SOME should retrieve the first when condition matches', () => {
+    // Setup the match
+    const [ct, v] = match('John Doe', [
+      '|',
       ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']],
       ['?', ['=', 'John Doe'], ['@', 'John Doe']],
       ['@', 'No one']
@@ -301,10 +328,10 @@ describe('FIND', () => {
   })
 
   // Test equality
-  test('FIND should retrieve default value if no condition matches and there is a default', () => {
+  test('SOME should retrieve default value if no condition matches and there is a default', () => {
     // Setup the match
     const [ct, v] = match('John Doe', [
-      '*',
+      '|',
       ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']],
       ['@', 'No one']
     ])
@@ -315,9 +342,9 @@ describe('FIND', () => {
   })
 
   // Test equality
-  test('FIND should not retrieve any value if no condition matches', () => {
+  test('SOME should not retrieve any value if no condition matches', () => {
     // Setup the match
-    const [ct, v] = match('John Doe', ['*', ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']]])
+    const [ct, v] = match('John Doe', ['|', ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']]])
 
     // Match result should be true
     expect(ct).toEqual(false)

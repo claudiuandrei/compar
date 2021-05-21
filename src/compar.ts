@@ -50,21 +50,21 @@ export const defaultMatchers: { [type: string]: Matcher } = {
   // Match every condition
   '&': (match, context, payload) => {
     // Keep the value so we can return it
-    let success, value
+    let matched: Unit = [false]
 
     // Find the value
     for (let current of payload) {
       // Look for a value
-      ;[success, value] = match(context, current)
+      matched = match(context, current)
 
       // Return only
-      if (!success) {
+      if (!matched[0]) {
         return [false]
       }
     }
 
     // Everything was succesful
-    return [true, value]
+    return matched
   },
 
   // Match any condition
@@ -72,11 +72,11 @@ export const defaultMatchers: { [type: string]: Matcher } = {
     // Find the value
     for (let current of payload) {
       // Look for a value
-      const [success, value] = match(context, current)
+      const matched = match(context, current)
 
       // Return only
-      if (success) {
-        return [true, value]
+      if (matched[0]) {
+        return matched
       }
     }
 

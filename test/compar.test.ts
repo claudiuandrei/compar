@@ -203,28 +203,6 @@ describe('VALUE', () => {
   })
 })
 
-describe('CONDITIONAL', () => {
-  // Test equality
-  test('CONDITIONAL should retrieve value if condition matches', () => {
-    // Setup the match
-    const [ct, v] = match('John Doe', ['&', ['=', 'John Doe'], ['@', 'Jane Doe']])
-
-    // Match result should be true
-    expect(ct).toEqual(true)
-    expect(v).toEqual('Jane Doe')
-  })
-
-  // Test equality
-  test('CONDITIONAL should not retrieve value if condition does not match', () => {
-    // Setup the match
-    const [ct, v] = match('John Doe', ['&', ['=', 'Jane Doe'], ['@', 'Jane Doe']])
-
-    // Match result should be true
-    expect(ct).toEqual(false)
-    expect(v).toBeUndefined()
-  })
-})
-
 describe('EVERY', () => {
   // Test equality
   test('EVERY should match if all values match', () => {

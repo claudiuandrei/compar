@@ -1,5 +1,4 @@
-import { create, defaultMatchers } from '../src/compar'
-import { range } from '../src/utils'
+import { create } from '../src/compar'
 
 // Load the default match
 const match = create()
@@ -128,7 +127,7 @@ describe('MATCH', () => {
     // Setup the match
     const [ct] = match(
       {
-        uid: '01234567-abcd-4abc-8def-0123456789ab'
+        uid: '01234567-abcd-4abc-8def-0123456789ab',
       },
       ['.', 'uid', ['=', '01234567-abcd-4abc-8def-0123456789ab']]
     )
@@ -142,7 +141,7 @@ describe('MATCH', () => {
     // Setup the match
     const [ct] = match(
       {
-        uid: '01234567-abcd-4abc-8def-0123456789ab'
+        uid: '01234567-abcd-4abc-8def-0123456789ab',
       },
       ['.', 'aid', ['=', '01234567-abcd-4abc-8def-0123456789ab']]
     )
@@ -208,7 +207,7 @@ describe('CONDITIONAL', () => {
   // Test equality
   test('CONDITIONAL should retrieve value if condition matches', () => {
     // Setup the match
-    const [ct, v] = match('John Doe', ['?', ['=', 'John Doe'], ['@', 'Jane Doe']])
+    const [ct, v] = match('John Doe', ['&', ['=', 'John Doe'], ['@', 'Jane Doe']])
 
     // Match result should be true
     expect(ct).toEqual(true)
@@ -218,7 +217,7 @@ describe('CONDITIONAL', () => {
   // Test equality
   test('CONDITIONAL should not retrieve value if condition does not match', () => {
     // Setup the match
-    const [ct, v] = match('John Doe', ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']])
+    const [ct, v] = match('John Doe', ['&', ['=', 'Jane Doe'], ['@', 'Jane Doe']])
 
     // Match result should be true
     expect(ct).toEqual(false)
@@ -257,12 +256,7 @@ describe('EVERY', () => {
   // Test equality
   test('EVERY should not retrieve value if not all conditions match', () => {
     // Setup the match
-    const [ct, v] = match('John Doe', [
-      '&',
-      ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']],
-      ['?', ['=', 'John Doe'], ['@', 'John Doe']],
-      ['@', 'No one']
-    ])
+    const [ct, v] = match('John Doe', ['&', ['=', 'Jane Doe'], ['=', 'John Doe'], ['@', 'No one']])
 
     // Match result should be true
     expect(ct).toEqual(false)
@@ -272,11 +266,7 @@ describe('EVERY', () => {
   // Test equality
   test('EVERY should retrieve last value if all conditions match and there is a default', () => {
     // Setup the match
-    const [ct, v] = match('Jane Doe', [
-      '&',
-      ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']],
-      ['@', 'Everyone']
-    ])
+    const [ct, v] = match('Jane Doe', ['&', ['=', 'Jane Doe'], ['@', 'Everyone']])
 
     // Match result should be true
     expect(ct).toEqual(true)
@@ -317,9 +307,9 @@ describe('SOME', () => {
     // Setup the match
     const [ct, v] = match('John Doe', [
       '|',
-      ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']],
-      ['?', ['=', 'John Doe'], ['@', 'John Doe']],
-      ['@', 'No one']
+      ['&', ['=', 'Jane Doe'], ['@', 'Jane Doe']],
+      ['&', ['=', 'John Doe'], ['@', 'John Doe']],
+      ['@', 'No one'],
     ])
 
     // Match result should be true
@@ -332,8 +322,8 @@ describe('SOME', () => {
     // Setup the match
     const [ct, v] = match('John Doe', [
       '|',
-      ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']],
-      ['@', 'No one']
+      ['&', ['=', 'Jane Doe'], ['@', 'Jane Doe']],
+      ['@', 'No one'],
     ])
 
     // Match result should be true
@@ -344,7 +334,7 @@ describe('SOME', () => {
   // Test equality
   test('SOME should not retrieve any value if no condition matches', () => {
     // Setup the match
-    const [ct, v] = match('John Doe', ['|', ['?', ['=', 'Jane Doe'], ['@', 'Jane Doe']]])
+    const [ct, v] = match('John Doe', ['|', ['&', ['=', 'Jane Doe'], ['@', 'Jane Doe']]])
 
     // Match result should be true
     expect(ct).toEqual(false)

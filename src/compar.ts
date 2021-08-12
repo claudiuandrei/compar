@@ -43,10 +43,6 @@ export const defaultMatchers: { [type: string]: Matcher } = {
   // Value
   '@': (match, context, [value]) => [true, value],
 
-  // Conditional
-  '?': (match, context, [condition, value]) =>
-    match(context, condition)[0] ? match(context, value) : [false],
-
   // Match every condition
   '&': (match, context, payload) => {
     // Keep the value so we can return it
@@ -82,7 +78,7 @@ export const defaultMatchers: { [type: string]: Matcher } = {
 
     // Nothing was found
     return [false]
-  }
+  },
 }
 
 // Create a custom match

@@ -2,7 +2,10 @@
 
 ## Extensible declarative rule matching engine
 
-Compar provides an easy way to decouple rules from code, and it is ideal for creating custom engines for experiments, feature flags, tutorials, etc. Compar is written in TypeScript and it runs in the browser, or on the server using node.js.
+Compar provides an easy way to decouple rules from code, and it is ideal for
+creating custom engines for experiments, feature flags, tutorials, etc. Compar
+is written in TypeScript and it runs in the browser, or on the server using
+node.js.
 
 ### Setup
 
@@ -21,33 +24,33 @@ npm install --save compar
 Before you start import the library
 
 ```javascript
-import { create } from 'compar'
+import { create } from "compar";
 ```
 
 #### Basic usage
 
 ```javascript
-const match = create()
+const match = create();
 
 match(
-  {
-    environment: 'stage',
-    userId: '45654800-7a3a-4273-b1cb-4eace4086cce'
-  },
   [
-    '&',
-    ['.', 'environment', ['|', ['=', 'stage'], ['=', 'production']]],
+    "&",
+    [".", "environment", ["|", ["=", "stage"], ["=", "production"]]],
     [
-      '.',
-      'userId',
+      ".",
+      "userId",
       [
-        '|',
-        ['=', '45654800-7a3a-4273-b1cb-4eace4086cce'],
-        ['=', '5137c85d-a4d0-4d6c-8d85-0a74a24007c8']
-      ]
-    ]
-  ]
-)
+        "|",
+        ["=", "45654800-7a3a-4273-b1cb-4eace4086cce"],
+        ["=", "5137c85d-a4d0-4d6c-8d85-0a74a24007c8"],
+      ],
+    ],
+  ],
+  {
+    environment: "stage",
+    userId: "45654800-7a3a-4273-b1cb-4eace4086cce",
+  },
+);
 ```
 
 ## License
